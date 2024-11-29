@@ -34,7 +34,7 @@ button_edit = sg.Button("Edit", key="edit", size=(7, 1), button_color=('white', 
 button_delete = sg.Button("Delete", key="delete", size=(7, 1), button_color=('white', 'red'))
 button_clear = sg.Button("Clear", key="clear", size=(7, 1), button_color=('white', 'gray'))
 label_todo_list = sg.Text("Todo list items (select):", size=(20, 1))
-items_todos = sg.Listbox(fetch_dtb(), size=(40, 20), key="task_item_from_list")
+items_todos = sg.Listbox(fetch_dtb(), size=(40, 20), key="task_item_from_list", enable_events=True)
 
 # Frontend - Window Interface
 title = "Todo App"
@@ -76,6 +76,8 @@ while True:
             new_window['task_description'].update(value="")
         case "clear":
             new_window['task_description'].update(value="")
+        case "task_item_from_list":
+            new_window['task_description'].update(value=values["task_item_from_list"][0])
         case sg.WIN_CLOSED:
             break
 
