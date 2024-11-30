@@ -67,15 +67,33 @@ while True:
             else:
                 sg.popup(f"Enter task description and try again!")
         case "edit":
-            print(event)
-            print(values)
-            new_window['task_description'].update(value="")
+            task = values['task_description'].capitalize()
+            old_task = values["task_item_from_list"][0]
+            if task:
+                conn = sqlite3.connect(DTB_LOCATION)
+                c = conn.cursor()
+                c.execute('UPDATE todos SET task = ? WHERE task = ?', (task, old_task))
+                conn.commit()
+                conn.close()
+                new_window['task_description'].update(value="")
+                new_window['task_item_from_list'].update(values=fetch_dtb())
+            else:
+                sg.popup(f"Select task and try again!")
         case "delete":
-            print(event)
-            print(values)
-            new_window['task_description'].update(value="")
+            task = values["task_item_from_list"][0]
+            if task:
+                conn = sqlite3.connect(DTB_LOCATION)
+                c = conn.cursor()
+                c.execute('DELETE FROM todos WHERE task = ?', (task,))
+                conn.commit()
+                conn.close()
+                new_window['task_description'].update(value="")
+                new_window['task_item_from_list'].update(values=fetch_dtb())
+            else:
+                sg.popup(f"Select task and try again!")
         case "clear":
             new_window['task_description'].update(value="")
+            new_window['task_item_from_list'].update(values=fetch_dtb())
         case "task_item_from_list":
             new_window['task_description'].update(value=values["task_item_from_list"][0])
         case sg.WIN_CLOSED:
